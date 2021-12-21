@@ -6,22 +6,30 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useCatch
+  useCatch,
 } from "remix";
 import type { LinksFunction } from "remix";
+import tailwindUrl from "./styles/tailwind.css";
 
-import globalStylesUrl from "~/styles/global.css";
-import darkStylesUrl from "~/styles/dark.css";
+// import globalStylesUrl from "~/styles/global.css";
+// import darkStylesUrl from "~/styles/dark.css";
 
 // https://remix.run/api/app#links
 export let links: LinksFunction = () => {
   return [
-    { rel: "stylesheet", href: globalStylesUrl },
+    {
+      rel: "preconnect",
+      href: "https://fonts.googleapis.com",
+    },
+    {
+      rel: "preconnect",
+      href: "https://fonts.gstatic.com",
+    },
     {
       rel: "stylesheet",
-      href: darkStylesUrl,
-      media: "(prefers-color-scheme: dark)"
-    }
+      href: "https://fonts.googleapis.com/css2?family=Satisfy&display=swap",
+    },
+    { rel: "stylesheet", href: tailwindUrl },
   ];
 };
 
@@ -95,7 +103,7 @@ export function CatchBoundary() {
 
 function Document({
   children,
-  title
+  title,
 }: {
   children: React.ReactNode;
   title?: string;
@@ -124,8 +132,11 @@ function Layout({ children }: { children: React.ReactNode }) {
     <div className="remix-app">
       <header className="remix-app__header">
         <div className="container remix-app__header-content">
-          <Link to="/" title="Remix" className="remix-app__header-home-link">
-            <RemixLogo />
+          {/* <Link to="/" title="Remix" className="remix-app__header-home-link"> */}
+          {/* <RemixLogo /> */}
+          {/* </Link> */}
+          <Link to="/" title="Anna & George wedding">
+            <span className="font-display">A & G </span>
           </Link>
           <nav aria-label="Main navigation" className="remix-app__header-nav">
             <ul>
@@ -133,10 +144,13 @@ function Layout({ children }: { children: React.ReactNode }) {
                 <Link to="/">Home</Link>
               </li>
               <li>
-                <a href="https://remix.run/docs">Remix Docs</a>
+                <Link to="/details">Details</Link>
               </li>
               <li>
-                <a href="https://github.com/remix-run/remix">GitHub</a>
+                <Link to="/rsvp">RSVP</Link>
+              </li>
+              <li>
+                <Link to="/about">about</Link>
               </li>
             </ul>
           </nav>

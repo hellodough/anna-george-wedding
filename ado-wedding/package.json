@@ -7,14 +7,21 @@
     "build": "remix build",
     "dev": "remix dev",
     "postinstall": "remix setup node",
-    "start": "remix-serve build"
+    "start": "remix-serve build",
+    "tw-watch": "tailwindcss --output ./app/styles/tailwind.css --config ./config/tailwind.js --watch",
+    "tw-minify": "tailwindcss --output ./app/styles/tailwind.css --config ./config/tailwind.js --minify"
   },
   "dependencies": {
     "@remix-run/react": "^1.0.6",
+    "@remix-run/serve": "^1.0.6",
+    "@types/marked": "^4.0.1",
+    "front-matter": "^4.0.2",
+    "marked": "^4.0.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "remix": "^1.0.6",
-    "@remix-run/serve": "^1.0.6"
+    "tailwindcss": "^3.0.1",
+    "tiny-invariant": "^1.2.0"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.0.6",

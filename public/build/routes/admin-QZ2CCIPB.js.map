@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["browser-route-module:/Users/ado/Documents/GitHub/anna-george-wedding/ado-wedding/app/routes/admin.tsx?browser", "../../../app/routes/admin.tsx"],
+  "sourcesContent": ["export { default, links } from \"/Users/ado/Documents/GitHub/anna-george-wedding/ado-wedding/app/routes/admin.tsx\";", "import { Link, Outlet, useLoaderData } from \"remix\";\nimport { getPosts } from \"~/post\";\nimport type { Post } from \"~/post\";\nimport adminStyles from \"~/styles/admin.css\";\n\nexport const links = () => {\n    return [{ rel: \"stylesheet\", href: adminStyles }];\n}\n\nexport const loader = () => {\n  return getPosts();\n};\n\nexport default function Admin() {\n  const posts = useLoaderData<Post[]>();\n  return (\n    <div className=\"admin\">\n      <nav>\n        <h1>Admin</h1>\n        <ul>\n          {posts.map(post => (\n            <li key={post.slug}>\n              <Link to={`/posts/${post.slug}`}>\n                {post.title}\n              </Link>\n            </li>\n          ))}\n        </ul>\n      </nav>\n      <main><Outlet /></main>\n    </div>\n  );\n}"],
+  "mappings": ";;;;;;;;;;;AAAA;;;ACAA;;;;;;AAKO,IAAM,QAAQ,MAAM;AACvB,SAAO,CAAC,EAAE,KAAK,cAAc,MAAM;AAAA;AAOxB,iBAAiB;AAC9B,QAAM,QAAQ;AACd,SACE,oCAAC,OAAD;AAAA,IAAK,WAAU;AAAA,KACb,oCAAC,OAAD,MACE,oCAAC,MAAD,MAAI,UACJ,oCAAC,MAAD,MACG,MAAM,IAAI,UACT,oCAAC,MAAD;AAAA,IAAI,KAAK,KAAK;AAAA,KACZ,oCAAC,MAAD;AAAA,IAAM,IAAI,UAAU,KAAK;AAAA,KACtB,KAAK,YAMhB,oCAAC,QAAD,MAAM,oCAAC,gCAAD;AAAA;",
+  "names": []
+}

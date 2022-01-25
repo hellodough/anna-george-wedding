@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["browser-route-module:/Users/ado/Documents/GitHub/anna-george-wedding/ado-wedding/app/routes/admin/index.tsx?browser", "../../../../app/routes/admin/index.tsx"],
+  "sourcesContent": ["export { default } from \"/Users/ado/Documents/GitHub/anna-george-wedding/ado-wedding/app/routes/admin/index.tsx\";", "import { Link } from \"remix\";\n\nexport default function AdminIndex() {\n    return (\n        <p>\n            <Link to=\"new\">Create a New Post</Link>\n        </p>\n    )\n}"],
+  "mappings": ";;;;;;;;;;AAAA;;;ACAA;AAEe,sBAAsB;AACjC,SACI,oCAAC,KAAD,MACI,oCAAC,MAAD;AAAA,IAAM,IAAG;AAAA,KAAM;AAAA;",
+  "names": []
+}

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["browser-route-module:/Users/ado/Documents/GitHub/anna-george-wedding/ado-wedding/app/routes/posts/index.tsx?browser", "../../../../app/routes/posts/index.tsx"],
-  "sourcesContent": ["export { default } from \"/Users/ado/Documents/GitHub/anna-george-wedding/ado-wedding/app/routes/posts/index.tsx\";", "import { Link, useLoaderData } from \"remix\"\nimport { getPosts } from \"~/post\";\n\ntype Post = {\n    slug: string;\n    title: string;\n}\n\nexport const loader = () => {\n    return getPosts();\n}\n\nexport default function Posts() {\n    const posts = useLoaderData<Post[]>();\n    console.log(posts);\n    return(\n        <div>\n            Posts\n            <ul>\n                {posts.map(post => (\n                    <li key={post.slug}>\n                        <Link to={post.slug}>{post.title}</Link>\n                    </li>\n                ))}\n            </ul>\n        </div>\n    )\n}"],
-  "mappings": ";;;;;;;;;;;;AAAA;;;ACAA;AAYe,iBAAiB;AAC5B,QAAM,QAAQ;AACd,UAAQ,IAAI;AACZ,SACI,oCAAC,OAAD,MAAK,SAED,oCAAC,MAAD,MACK,MAAM,IAAI,UACP,oCAAC,MAAD;AAAA,IAAI,KAAK,KAAK;AAAA,KACV,oCAAC,MAAD;AAAA,IAAM,IAAI,KAAK;AAAA,KAAO,KAAK;AAAA;",
-  "names": []
-}

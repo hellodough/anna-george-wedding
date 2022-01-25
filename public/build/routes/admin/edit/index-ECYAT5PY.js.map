@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["browser-route-module:/Users/ado/Documents/GitHub/anna-george-wedding/ado-wedding/app/routes/admin/edit/index.tsx?browser", "../../../../../app/routes/admin/edit/index.tsx"],
-  "sourcesContent": ["export { default } from \"/Users/ado/Documents/GitHub/anna-george-wedding/ado-wedding/app/routes/admin/edit/index.tsx\";", "export default function EditPage() {\n    return (\n        <p>\n            Click on a post to edit it\n        </p>\n    )\n}"],
-  "mappings": ";;;;;;AAAA;;;ACAA;AAAe,oBAAoB;AAC/B,SACI,oCAAC,KAAD,MAAG;AAAA;",
-  "names": []
-}

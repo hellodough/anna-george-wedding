@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["browser-route-module:/Users/ado/Documents/GitHub/anna-george-wedding/ado-wedding/app/routes/admin/new.tsx?browser", "../../../../app/routes/admin/new.tsx"],
-  "sourcesContent": ["export { default } from \"/Users/ado/Documents/GitHub/anna-george-wedding/ado-wedding/app/routes/admin/new.tsx\";", "export default function NewPost() {\n    return <h2>New Post</h2>;\n}"],
-  "mappings": ";;;;;;AAAA;;;ACAA;AAAe,mBAAmB;AAC9B,SAAO,oCAAC,MAAD,MAAI;AAAA;",
-  "names": []
-}

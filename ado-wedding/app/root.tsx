@@ -9,29 +9,29 @@ import {
   useCatch,
 } from "remix";
 import type { LinksFunction } from "remix";
-import tailwindUrl from "./styles/tailwind.css";
+// import tailwindUrl from "./styles/tailwind.css";
+import styles from "./styles/app.css";
 
-// import globalStylesUrl from "~/styles/global.css";
 // import darkStylesUrl from "~/styles/dark.css";
 
-import { Fragment } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
+import { Disclosure, Menu } from "@headlessui/react";
+import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 
 const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
-]
+  { name: "Home", href: "/", current: true },
+  { name: "Bridesmaids", href: "/bridesmaids", current: false },
+  // { name: 'Details', href: '#', current: false },
+  // { name: 'RSVP', href: '#', current: false },
+  // { name: 'Our Story', href: '#', current: false },
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export function NavMenu() {
   return (
-    <Disclosure as="nav" className="bg-gray-800">
+    <Disclosure as="nav">
       {({ open }) => (
         <>
           <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -47,20 +47,13 @@ export function NavMenu() {
                   )}
                 </Disclosure.Button>
               </div>
-              <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-                <div className="flex-shrink-0 flex items-center">
-                  <img
-                    className="block lg:hidden h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
-                    alt="Workflow"
-                  />
-                  <img
-                    className="hidden lg:block h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
-                    alt="Workflow"
-                  />
+              <div className="flex-1 flex items-center justify-between sm:items-stretch sm:justify-start">
+                <div className="flex-shrink-0 flex items-center hidden sm:block">
+                  <Link to="/" title="Anna & George wedding">
+                    <span className="font-display text-6xl">anna & george</span>
+                  </Link>
                 </div>
-                <div className="hidden sm:block sm:ml-6">
+                {/* <div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
                       <a
@@ -76,72 +69,7 @@ export function NavMenu() {
                       </a>
                     ))}
                   </div>
-                </div>
-              </div>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <button
-                  type="button"
-                  className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
-
-                {/* Profile dropdown */}
-                <Menu as="div" className="ml-3 relative">
-                  <div>
-                    <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                      <span className="sr-only">Open user menu</span>
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
-                    </Menu.Button>
-                  </div>
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Your Profile
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Settings
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Sign out
-                          </a>
-                        )}
-                      </Menu.Item>
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
+                </div> */}
               </div>
             </div>
           </div>
@@ -154,10 +82,12 @@ export function NavMenu() {
                   as="a"
                   href={item.href}
                   className={classNames(
-                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'block px-3 py-2 rounded-md text-base font-medium'
+                    item.current
+                      ? "bg-gray-900 text-white"
+                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                    "block px-3 py-2 rounded-md text-base font-medium"
                   )}
-                  aria-current={item.current ? 'page' : undefined}
+                  aria-current={item.current ? "page" : undefined}
                 >
                   {item.name}
                 </Disclosure.Button>
@@ -167,7 +97,7 @@ export function NavMenu() {
         </>
       )}
     </Disclosure>
-  )
+  );
 }
 
 // https://remix.run/api/app#links
@@ -185,7 +115,8 @@ export let links: LinksFunction = () => {
       rel: "stylesheet",
       href: "https://fonts.googleapis.com/css2?family=Satisfy&display=swap",
     },
-    { rel: "stylesheet", href: tailwindUrl },
+    // { rel: "stylesheet", href: tailwindUrl },
+    { rel: "stylesheet", href: styles },
   ];
 };
 
@@ -285,42 +216,29 @@ function Document({
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="remix-app">
+    <div className="remix-app bg-amber-400 h-full">
       <header className="remix-app__header">
-        <div className="container remix-app__header-content">
-          {/* <Link to="/" title="Remix" className="remix-app__header-home-link"> */}
-          {/* <RemixLogo /> */}
-          {/* </Link> */}
-          <Link to="/" title="Anna & George wedding">
-            <span className="font-display">A & G </span>
-          </Link>
-          <NavMenu />
-          {/* <nav aria-label="Main navigation" className="remix-app__header-nav">
-            <ul className="flex items-center justify-between h-16">
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/details">Details</Link>
-              </li>
-              <li>
-                <Link to="/rsvp">RSVP</Link>
-              </li>
-              <li>
-                <Link to="/about">about</Link>
-              </li>
-            </ul>
-          </nav> */}
+        <div className="remix-app__header-content">
+          {/* <NavMenu /> */}
+          {/* <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4">
+            <div className="relative flex items-center justify-between h-16">
+              <div className="flex-shrink-0 flex items-center ">
+                <Link to="/" title="Anna & George wedding">
+                  <span className="font-display lg:text-4xl md:text-2xl sm:text-xl xs:text-l">anna & george</span>
+                </Link>
+              </div>
+            </div>
+          </div> */}
         </div>
       </header>
       <div className="remix-app__main">
-        <div className="container remix-app__main-content">{children}</div>
+        <div className="remix-app__main-content">{children}</div>
       </div>
-      <footer className="remix-app__footer">
+      {/* <footer className="remix-app__footer">
         <div className="container remix-app__footer-content">
           <p>&copy; You!</p>
         </div>
-      </footer>
+      </footer> */}
     </div>
   );
 }

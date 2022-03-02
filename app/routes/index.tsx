@@ -1,13 +1,14 @@
 import type { MetaFunction } from "remix";
 import { Link } from "remix";
+import { HeaderNav } from "~/components/HeaderNav/HeaderNav";
 
 type IndexData = {
-  resources: Array<{ name: string; url: string }>;
-  demos: Array<{ name: string; to: string }>;
+  resourcesm: Array<{ name: string; url: string }>;
+  demosm: Array<{ name: string; to: string }>;
 };
 
 
-// https://remix.run/api/conventions#meta
+// httpsm://remix.run/api/conventions#meta
 export let meta: MetaFunction = () => {
   return {
     title: "Anna & George",
@@ -15,30 +16,17 @@ export let meta: MetaFunction = () => {
   };
 };
 
-// https://remix.run/guides/routing#index-routes
+// httpsm://remix.run/guides/routing#index-routes
 export default function Index() {
 
   return (
     <div className="remix__page">
       <div className="bg-hero-image w-screen h-screen bg-no-repeat text-white bg-cover bg-center">
-        <header>
-          <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4">
-            <div className="relative flex items-center justify-between h-16">
-              <div className="flex-shrink-0 flex items-center ">
-                <Link to="/" title="Anna & George wedding">
-                  <span className="font-display lg:text-4xl md:text-2xl sm:text-xl xs:text-l">
-                    anna & george
-                  </span>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </header>
-        {/* <div className="grid grid-rows-4"> */}
-        <main className="flex flex-col text-center">
+        <HeaderNav inverted={true}/>
+        <main className="flex flex-col justify-center text-center pt-24">
           <div>
-            <div className="text-body uppercase text-xl">
-              <svg viewBox="0 0 500 100">
+            <div className="text-body uppercase text-lg">
+              <svg viewBox="0 0 500 75">
                 <path
                   id="curve"
                   fill="transparent"
@@ -58,19 +46,19 @@ export default function Index() {
                 </text>
               </svg>
             </div>
-            <div className="font-bold text-4xl s:text-xl uppercase">
+            <div className="font-bold sm:text-5xl text-2xl uppercase">
               the
               <br /> wedding
               <br /> of
             </div>
-            <div className="font-display text-8xl s:text-2xl py-6">
+            <div className="font-display sm:text-9xl text-6xl py-6">
               Anna & George
             </div>
           </div>
-          <div className="uppercase text-bold">
-            <p className="text-2xl tracking-wider">Saturday</p>
-            <p className="text-4xl">07 · 16 · 22</p>
-            <p className="text-2xl tracking-wider">Chicago</p>
+          <div className="uppercase text-semibold">
+            <p className="sm:text-4xl text-xl tracking-widest">Saturday</p>
+            <p className="sm:text-5xl text-bold text-2xl">07 · 16 · 22</p>
+            <p className="sm:text-4xl tracking-widest text-xl">Chicago</p>
           </div>
         </main>
       </div>

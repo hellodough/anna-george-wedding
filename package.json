@@ -18,9 +18,11 @@
     "@remix-run/serve": "^1.0.6",
     "@types/marked": "^4.0.1",
     "front-matter": "^4.0.2",
+    "mapbox-gl": "^2.7.0",
     "marked": "^4.0.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-map-gl": "^7.0.7",
     "remix": "^1.0.6",
     "tiny-invariant": "^1.2.0"
   },

@@ -1,21 +1,14 @@
-import { Link } from "remix";
+import { HeaderNav } from "~/components/HeaderNav/HeaderNav";
+
 
 export default function Bridesmaids() {
+  const headerProps = {
+    currentPage: "bridesmaids",
+    inverted: false
+  }
   return (
     <div className="bg-amber-400 h-screen bg-cover">
-      <header>
-        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4">
-          <div className="relative flex items-center justify-between h-16">
-            <div className="flex-shrink-0 flex items-center ">
-              <Link to="/" title="Anna & George wedding">
-                <span className="font-display lg:text-4xl md:text-2xl sm:text-xl xs:text-l">
-                  anna & george
-                </span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      <HeaderNav currentPage="bridesmaids" />
       <div className="lg:px-20 sm:px-4">
         <div className="grid xs:gap-1 gap-4 grid-cols-2 s:grid-cols-4">
           <div className="flex items-baseline items-stretch">

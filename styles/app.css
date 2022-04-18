@@ -6,6 +6,9 @@
   .btn-primary {
     @apply py-2 px-4 bg-black text-white font-semibold shadow-sm hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
   }
+  .btn-primary-dark {
+    @apply py-2 px-4 bg-white text-black font-semibold shadow-sm hover:text-white hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+  }
 }
 .map-container {
   height: 400px;

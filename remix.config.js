@@ -7,10 +7,4 @@ module.exports = {
   publicPath: "/build/",
   serverBuildDirectory: "build",
   devServerPort: 8002,
-  // routes(defineRoutes) {
-  //   return defineRoutes(route => {
-  //     route("/somewhere/cool/*", "root.tsx");
-  //     route("/.well-known/pki-validation/*", "root.tsx")
-  //   });
-  // }
 };

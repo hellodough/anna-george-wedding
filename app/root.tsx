@@ -1,18 +1,34 @@
 import {
+  json,
   Links,
   LiveReload,
   Meta,
   Outlet,
+  redirect,
   Scripts,
   ScrollRestoration,
   useCatch,
 } from "remix";
 import type { LinksFunction } from "remix";
-// import tailwindUrl from "./styles/tailwind.css";
 import styles from "./styles/app.css";
+import { userValidated } from "~/cookies";
 
-
-// import darkStylesUrl from "~/styles/dark.css";
+export async function loader({ request }) {
+  const cookieHeader = request.headers.get("Cookie");
+  const cookie = (await userValidated.parse(cookieHeader)) || {};
+  const path = new URL(request.url).pathname;
+  console.log("cookie " + cookie.annageorge);
+  console.log(path);
+  if (cookie?.annageorge) {
+    if (path === "/login") {
+      return redirect("/");
+    }
+    return json({ ok: true });
+  } else if (path === "/login") {
+    return json({ ok: true });
+  }
+  return redirect("/login");
+}
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -34,7 +50,10 @@ export let links: LinksFunction = () => {
       href: "https://fonts.googleapis.com/css2?family=Satisfy&display=swap",
     },
     { rel: "stylesheet", href: styles },
-    { rel: "stylesheet", href: "https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" }
+    {
+      rel: "stylesheet",
+      href: "https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css",
+    },
   ];
 };
 
@@ -133,12 +152,11 @@ function Document({
 }
 
 function Layout({ children }: { children: React.ReactNode }) {
+  // add password page here
   return (
     <div className="remix-app bg-white h-full">
       <div className="remix-app__main">
-        <div className="remix-app__main-content">
-          {children}
-        </div>
+        <div className="remix-app__main-content">{children}</div>
       </div>
       {/* <footer className="remix-app__footer">
         <div className="container remix-app__footer-content">

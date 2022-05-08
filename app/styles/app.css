@@ -710,12 +710,12 @@ Ensure the default browser behavior of the `hidden` attribute.
   display: none;
 }
 
-.h-full {
-  height: 100%;
-}
-
 .h-screen {
   height: 100vh;
+}
+
+.h-full {
+  height: 100%;
 }
 
 .h-5 {
@@ -963,6 +963,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-bottom: 0.25rem;
 }
 
+.pt-52 {
+  padding-top: 13rem;
+}
+
 .pt-24 {
   padding-top: 6rem;
 }
@@ -983,10 +987,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-left: 4rem;
 }
 
-.pt-52 {
-  padding-top: 13rem;
-}
-
 .pt-1 {
   padding-top: 0.25rem;
 }
@@ -995,12 +995,12 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-top: 0.75rem;
 }
 
-.pt-12 {
-  padding-top: 3rem;
-}
-
 .pb-3 {
   padding-bottom: 0.75rem;
+}
+
+.pt-12 {
+  padding-top: 3rem;
 }
 
 .text-left {
@@ -1011,12 +1011,12 @@ Ensure the default browser behavior of the `hidden` attribute.
   text-align: center;
 }
 
-.font-display {
-  font-family: Satisfy;
-}
-
 .font-body {
   font-family: Open Sans;
+}
+
+.font-display {
+  font-family: Satisfy;
 }
 
 .text-lg {

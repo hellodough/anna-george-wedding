@@ -28,7 +28,7 @@ export default function Details() {
   return (
     <>
       <HeaderNav currentPage="Details" />
-      <div className="text-center">
+      <div className="text-center font-body">
         {/* mobile view */}
         <div className="bg-arbory-hall text-white h-screen bg-cover sm:hidden flex flex-col justify-center text-left pl-16 drop-shadow-md">
           <LocationDetails />

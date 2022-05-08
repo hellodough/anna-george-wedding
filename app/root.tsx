@@ -12,6 +12,7 @@ import {
 import type { LinksFunction } from "remix";
 import styles from "./styles/app.css";
 import { userValidated } from "~/cookies";
+import { HeaderNav } from "./components/HeaderNav/HeaderNav";
 
 export async function loader({ request }) {
   const cookieHeader = request.headers.get("Cookie");
@@ -49,6 +50,10 @@ export let links: LinksFunction = () => {
       rel: "stylesheet",
       href: "https://fonts.googleapis.com/css2?family=Satisfy&display=swap",
     },
+    {
+      rel: "stylesheet",
+      href: "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,800;1,300;1,400;1,500&display=swap",
+    },
     { rel: "stylesheet", href: styles },
     {
       rel: "stylesheet",
@@ -75,14 +80,14 @@ export function ErrorBoundary({ error }: { error: Error }) {
   return (
     <Document title="Error!">
       <Layout>
-        <div>
-          <h1>There was an error</h1>
-          <p>{error.message}</p>
-          <hr />
-          <p>
-            Hey, developer, you should replace this with what you want your
-            users to see.
-          </p>
+        <div className="h-screen">
+          <HeaderNav />
+          <div className="lg:px-20 sm:px-4 pt-52 font-body">
+            <h1>There was an error</h1>
+            <p>{error.message}</p>
+            <hr />
+            {/* <img src="" /> */}
+          </div>
         </div>
       </Layout>
     </Document>

@@ -6,15 +6,7 @@ import { createUser } from "~/utils/guests.server";
 import { RSVPForm } from "~/utils/types.server";
 import { InputField } from "./InputField";
 import { formatGuestName } from "./helpers";
-
-async function findUser({ request }) {
-  const bodyParams = await request.formData();
-  const name = bodyParams.get("name");
-  const exists = await prisma.guest.count({
-    where: { name: formatGuestName(name) },
-  });
-  return { exists };
-}
+import { MealChoice } from "./MealChoice";
 
 export async function action({ request }) {
   const bodyParams = await request.formData();
@@ -25,12 +17,11 @@ export async function action({ request }) {
   const attending = bodyParams.get("attending");
   const guestName = bodyParams.get("guestName");
   const mealChoice = bodyParams.get("mealChoice");
+  const guestMealChoice = bodyParams.get("guestMealChoice");
+  const userExists = bodyParams.get("userExists");
 
   // search user and return data
   if (searchUser) {
-    // const exists = await prisma.guest.count({
-    //   where: { name: formatGuestName(name) },
-    // });
     const foundUser = await prisma.guest.findUnique({
       where: { name: formatGuestName(name) },
     });
@@ -41,13 +32,10 @@ export async function action({ request }) {
         ...foundUser,
         attending: true ? "attending" : "notAttending",
       };
-      console.log(formData);
       return json({ ...formData, exists: true, searched: true });
     }
 
-    console.log("could not find user");
-
-    return json({ exists: false, searched: true });
+    return json({ name, exists: false, searched: true });
   }
 
   if (name && attending !== null) {
@@ -61,9 +49,10 @@ export async function action({ request }) {
       guestName: guestName && formatGuestName(guestName),
       dietRestrictions: diets,
       mealChoice,
+      guestMealChoice,
     };
 
-    const guestInfo = await createUser(formData);
+    const guestInfo = await createUser(formData, userExists);
     if (!guestInfo) {
       return json(
         {
@@ -85,32 +74,29 @@ export async function action({ request }) {
 export default function RSVP() {
   const data = useActionData();
 
-  const userSearched = data?.searched;
-  const [name, setName] = React.useState<string | undefined>(
-    data?.success || data?.name
-  );
+  const [name, setName] = React.useState(data?.success || data?.name || "");
   const [showGuestFields, setShowGuestFields] = React.useState(false);
-  const [email, setEmail] = React.useState<string | undefined>(undefined);
-  const [guestName, setGuestName] = React.useState<string | undefined>(
-    undefined
-  );
-  const [showForm, setShowForm] = React.useState(false);
-  const [attending, setAttending] = React.useState<string | undefined>(
-    undefined
-  );
-  const [mealChoice, setMealChoice] = React.useState<string | undefined>(
-    undefined
-  );
+  const [email, setEmail] = React.useState("");
+  const [guestName, setGuestName] = React.useState("");
+  // const [showForm, setShowForm] = React.useState(false);
+  const [userExists, setUserExists] = React.useState(0);
+  const [attending, setAttending] = React.useState("");
+  const [mealChoice, setMealChoice] = React.useState("");
+  const [guestMealChoice, setGuestMealChoice] = React.useState("");
+  const [diet, setDiet] = React.useState("");
+  const [showNextSteps, setShowNextSteps] = React.useState(false);
+  const [userSearched, setUserSearched] = React.useState(false);
   const onAddClick = () => {
     setShowGuestFields(true);
   };
 
   const onRemove = () => {
     setShowGuestFields(false);
+    setGuestName('');
   };
 
   const onShowFormClick = () => {
-    setShowForm(true);
+    setShowNextSteps(false);
   };
 
   const onGuestNameChange = (updatedName: string) => {
@@ -121,8 +107,8 @@ export default function RSVP() {
     setAttending(e.currentTarget.value);
   };
 
-  const onMealChoiceChange = (e: FormEvent<HTMLInputElement>) => {
-    setMealChoice(e.currentTarget.value);
+  const onMealChoiceChange = (updatedMealChoice: string) => {
+    setMealChoice(updatedMealChoice);
   };
 
   const onEmailChange = (updatedEmail: string) => {
@@ -133,30 +119,39 @@ export default function RSVP() {
     setName(updatedName);
   };
 
+  const onDietChange = (updatedDiet: string) => {
+    setDiet(updatedDiet);
+  };
+
   useEffect(() => {
-    setShowForm(!!data?.success || data?.exists);
-    setAttending(data?.attending);
-    setName(data?.name);
-    setMealChoice(data?.mealChoice);
-    setShowGuestFields(data?.guestName);
-    setGuestName(data?.guestName);
-    setEmail(data?.email);
+    // setShowForm(!!data?.success);
+    setShowNextSteps(data?.success);
+    setAttending(data?.attending ? "attending" : "notAttending");
+    setName(data?.name || "");
+    setMealChoice(data?.mealChoice || "");
+    setGuestMealChoice(data?.guestMealChoice || "");
+    setShowGuestFields(data?.guestName || "");
+    setGuestName(data?.guestName || "");
+    setEmail(data?.email || "");
+    setUserExists(data?.exists || false);
+    setDiet(data?.dietRestrictions || "");
+    setUserSearched(data?.searched || data?.success);
   }, [data]);
 
   return (
     <div className="h-screen">
       <HeaderNav currentPage="RSVP" />
-      <div className="lg:px-20 sm:px-4 pt-52 font-body">
+      <div className="2xl:px-96 xl:px-40 lg:px-20 sm:px-4 sm:pt-32 pt-10 font-body">
         <div className="grid xs:gap-1 gap-6 grid-cols-1 md:grid-cols-2 justify-items-center items-start">
-          <div className="hidden md:flex items-baseline">
+          <div className="hidden md:flex items-baseline max-w-lg">
             <img src="https://github.com/hellodough/anna-george-wedding/blob/main/assets/images/bw_square.jpg?raw=true" />
           </div>
-          <div className="flex items-center s:col-span-3 text-center">
+          <div className="flex items-center s:col-span-3 text-center max-w-lg">
             <div>
               <h1 className="text-sky-700 font-display text-4xl lg:text-5xl mb-7">
                 RSVP
               </h1>
-              {data?.success && !showForm ? (
+              {showNextSteps ? (
                 <>
                   <p>Submitted! Thanks for sharing!</p>
                   <button
@@ -172,22 +167,22 @@ export default function RSVP() {
                 </>
               ) : (
                 <>
-                  {data?.success && (
+                  <p className="lg:text-base xs:text-sm mb-6 font-body max-w-m">
+                    Please kindly respond no later than <strong>June 25</strong>
+                  </p>
+                  <p className="lg:text-base xs:text-sm mb-6 font-body max-w-m italic">
+                    No need to fill the form out if you already replied by mail
+                    unless you want to change your response.
+                  </p>
+                  <Error showError={data?.nameError || data?.attendingError} />
+                  {userExists && (
                     <p className="mb-6 font-body justify-center">
                       Note: you have already replied, but feel free to change
                       any details
                     </p>
                   )}
-                  <p className="lg:text-base xs:text-sm mb-6 font-body max-w-sm">
-                    Please kindly respond no later than <strong>June 25</strong>
-                  </p>
-                  <p className="lg:text-base xs:text-sm mb-6 font-body max-w-sm">
-                    No need to fill the form out if you already replied by mail
-                    unless you want to change your response.
-                  </p>
-                  <Error showError={data?.nameError || data?.attendingError} />
                   <Form replace method="post">
-                    <div className="flex gap-1 justify-around">
+                    <div className="flex gap-4 justify-center">
                       <InputField
                         text="name"
                         value={name}
@@ -288,54 +283,45 @@ export default function RSVP() {
                           />
                           <InputField
                             text="dietary restrictions"
-                            value={data?.success && data.dietaryRestrictions}
+                            value={diet}
+                            onFieldChange={onDietChange}
                           />
                         </div>
                         {/* meal options */}
-                        <div className="pt-3">
+                        <div className="pt-4">
                           <fieldset>
-                            <label>Meal Options</label>
-                            <p className="pb-3">
+                            <label>
+                              <strong>Meal Options</strong>
+                            </label>
+                            <p className="pb-3 text-sm">
                               We will update this with specific dishes when we
                               finalize the menu
                             </p>
-                            <label htmlFor="mealMeat" className="mr-2">
-                              Meat
-                            </label>
-                            <input
-                              id="mealMeat"
-                              name="mealChoice"
-                              type="radio"
-                              value="meat"
-                              checked={mealChoice === "meat"}
-                              onChange={onMealChoiceChange}
-                            />
-                            <label htmlFor="mealChicken" className="mr-2">
-                              Chicken
-                            </label>
-                            <input
-                              id="mealChicken"
-                              name="mealChoice"
-                              type="radio"
-                              value="chicken"
-                              checked={mealChoice === "chicken"}
-                              onChange={onMealChoiceChange}
-                            />
-                            <label htmlFor="mealVeg" className="mr-2">
-                              Vegetarian
-                            </label>
-                            <input
-                              id="mealVeg"
-                              name="mealChoice"
-                              type="radio"
-                              value="vegetarian"
-                              checked={mealChoice === "vegetarian"}
-                              onChange={onMealChoiceChange}
-                            />
+                            <div className="flex text-left justify-evenly gap-4">
+                              <div>
+                                {guestName && <p>{name}'s meal choice</p>}
+                                <MealChoice
+                                  fieldPrefix="meal"
+                                  mealChoice={mealChoice}
+                                  onMealChoiceChange={onMealChoiceChange}
+                                />
+                              </div>
+                              {guestName && (
+                                <div>
+                                  <p>{guestName}'s meal choice</p>
+                                  <MealChoice
+                                    fieldPrefix="guestMeal"
+                                    mealChoice={guestMealChoice}
+                                    onMealChoiceChange={setGuestMealChoice}
+                                  />
+                                </div>
+                              )}
+                            </div>
                           </fieldset>
                         </div>
                       </div>
                     )}
+                    <input type="hidden" name="userExists" value={userExists} />
                     {userSearched && (
                       <button
                         className="btn-primary uppercase mt-14"

@@ -5,28 +5,26 @@ export const InputField = ({
   text,
   value,
   error,
-  onFieldChange
+  onFieldChange,
 }: {
   text: string;
-  value?: string;
+  value: string;
   error?: boolean;
   onFieldChange?: (updatedName: string) => void;
 }) => {
   const convertedField: string = camelCase(text);
-  const [curVal, setCurVal] = useState(value);
 
   const onChange = (e: FormEvent<HTMLInputElement>) => {
-    setCurVal(e.currentTarget.value);
-    if(onFieldChange) {
+    if (onFieldChange) {
       onFieldChange(e.currentTarget.value);
     }
   };
 
-  const displayError = error && !curVal;
+  const displayError = error && !value;
 
   return (
     <div>
-      <div className="p-1 text-left">
+      <div className="p-1 text-left font-medium">
         <label htmlFor={convertedField}>{text}</label>
       </div>
       <input
@@ -35,10 +33,10 @@ export const InputField = ({
         className={`border-solid border rounded-md px-3 py-2 w-full${
           displayError ? " border-red-700" : " border-black"
         }`}
-        value={curVal}
+        value={value}
         onChange={onChange}
       />
-      {displayError && !curVal && (
+      {displayError && !value && (
         <p className="text-red-700 pt-1">{`Please enter a valid ${text}`}</p>
       )}
     </div>

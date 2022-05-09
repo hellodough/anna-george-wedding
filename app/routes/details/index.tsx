@@ -76,7 +76,7 @@ export default function Details() {
 const UpdateDetails = () => (
   <>
     <h3 className="uppercase text-lg mt-4 mb-2 font-semibold">Updates</h3>
-    <p>Save the dates have been sent,<br/> please wait for RSVP information</p>
+    <p>Invitations have just been sent, you can also RSVP on the website</p>
   </>
 );
 

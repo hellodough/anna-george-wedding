@@ -5,6 +5,7 @@ export default function Registry() {
     <>
       <HeaderNav currentPage="Registry" />
       <div className="sm:pt-24">
+       <a href="https://www.honeyfund.com/wedding/do-tzintzev-07-16-2022" className="underline to-blue-700"> 🧳 Fund our Southern European Honeymoon  ✈️✈️ ✈️ ✈️ ✈️ </a>
         <script
           id="script_myregistry_giftlist_iframe"
           type="text/javascript"

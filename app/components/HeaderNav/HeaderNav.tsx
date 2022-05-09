@@ -70,8 +70,14 @@ const navigation = [
   // { name: "Bridesmaids", href: "/bridesmaids" },
   { name: "Details", href: "/details", icon: <DetailsIcon /> },
   { name: "Travel", href: "/travel", icon: <TravelIcon /> },
+  {
+    name: "Registry",
+    href: "https://www.myregistry.com/wedding-registry/anna-do-and-george-tzintzev-chicago-il/3214448",
+    icon: <RegistryIcon />,
+    external: true,
+  },
   // { name: "Registry", href: "/registry", icon: <RegistryIcon /> },
-  // { name: 'RSVP', href: '#', icon: <RSVPIcon /> },
+  { name: "RSVP", href: "/rsvp", icon: <RSVPIcon /> },
   // { name: 'Our Story', href: '#' },
 ];
 
@@ -129,19 +135,24 @@ function NavMenu({ currentPage, inverted }: HeaderNavProps) {
   return (
     <div className="hidden sm:block sm:ml-6">
       <div className="flex space-x-4 text-2xl font-normal">
-        {navigation.map((item) => (
-          <Link
-            key={item.name}
-            to={item.href}
-            className={classNames(
-              currentPage === item.name && selectedClass,
-              `${colorClass} px-3 py-2 rounded-md uppercase hover:underline hover:decoration-dashed hover:decoration-yellow-400`
-            )}
-            aria-current={currentPage === item.name ? "page" : undefined}
-          >
-            {item.name}
-          </Link>
-        ))}
+        {navigation.map((item) => {
+          if (item.external) {
+            return <a href={item.href} className={`${colorClass} px-3 py-2 rounded-md uppercase hover:underline hover:decoration-dashed hover:decoration-yellow-400`} key={item.name}>{item.name}</a>;
+          }
+          return (
+            <Link
+              key={item.name}
+              to={item.href}
+              className={classNames(
+                currentPage === item.name && selectedClass,
+                `${colorClass} px-3 py-2 rounded-md uppercase hover:underline hover:decoration-dashed hover:decoration-yellow-400`
+              )}
+              aria-current={currentPage === item.name ? "page" : undefined}
+            >
+              {item.name}
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

@@ -70,12 +70,12 @@ const navigation = [
   // { name: "Bridesmaids", href: "/bridesmaids" },
   { name: "Details", href: "/details", icon: <DetailsIcon /> },
   { name: "Travel", href: "/travel", icon: <TravelIcon /> },
-  {
-    name: "Registry",
-    href: "https://www.myregistry.com/wedding-registry/anna-do-and-george-tzintzev-chicago-il/3214448",
-    icon: <RegistryIcon />,
-    external: true,
-  },
+  // {
+  //   name: "Registry",
+  //   href: "https://www.myregistry.com/wedding-registry/anna-do-and-george-tzintzev-chicago-il/3214448",
+  //   icon: <RegistryIcon />,
+  //   external: true,
+  // },
   // { name: "Registry", href: "/registry", icon: <RegistryIcon /> },
   { name: "RSVP", href: "/rsvp", icon: <RSVPIcon /> },
   // { name: 'Our Story', href: '#' },

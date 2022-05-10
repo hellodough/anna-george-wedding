@@ -1,5 +1,4 @@
 import { HeaderNav } from "~/components/HeaderNav/HeaderNav";
-import MapContainer from "~/components/MapContainer/MapContainer";
 
 export default function Travel() {
   const hotelImage =
@@ -61,7 +60,6 @@ export default function Travel() {
                 Reserve over the phone
               </a>
             </p>
-            <p className="py-1">{/* <MapContainer /> */}</p>
           </div>
         </div>
         <div className="lg:max-w-xl">

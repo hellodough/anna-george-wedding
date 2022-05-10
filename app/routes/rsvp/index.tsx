@@ -27,7 +27,6 @@ export async function action({ request }) {
     });
 
     if (foundUser) {
-      console.log(`${name} has already RSVPed, see you in July!`);
       const formData = {
         ...foundUser,
         attending: true ? "attending" : "notAttending",
@@ -39,9 +38,9 @@ export async function action({ request }) {
   }
 
   if (name && attending !== null) {
-    const exists = await prisma.guest.count({
+    const exists = userExists ? await prisma.guest.count({
       where: { name: formatGuestName(name) },
-    });
+    }) : false;
     const formData: RSVPForm = {
       name: formatGuestName(name),
       email,
@@ -124,7 +123,6 @@ export default function RSVP() {
   };
 
   useEffect(() => {
-    // setShowForm(!!data?.success);
     setShowNextSteps(data?.success);
     setAttending(data?.attending ? "attending" : "notAttending");
     setName(data?.name || "");

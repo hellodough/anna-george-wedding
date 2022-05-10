@@ -5,19 +5,19 @@ import type { RSVPForm } from "./types.server";
 
 export const createUser = async (guest: RSVPForm, userExists: boolean) => {
   if (userExists) {
-    const updatedGuest = await prisma.guest.update({
+    const newGuest = await prisma.guest.create({
       data: {
         ...guest,
       },
-      where: { name: formatGuestName(guest.name) }
     });
-
-    return { name: updatedGuest.name }
+    return { name: newGuest.name };
   }
-  const newGuest = await prisma.guest.create({
+  const updatedGuest = await prisma.guest.update({
     data: {
       ...guest,
     },
+    where: { name: formatGuestName(guest.name) }
   });
-  return { name: newGuest.name };
+
+  return { name: updatedGuest.name }
 };

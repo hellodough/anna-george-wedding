@@ -38,9 +38,11 @@ export async function action({ request }) {
   }
 
   if (name && attending !== null) {
-    const exists = userExists ? await prisma.guest.count({
-      where: { name: formatGuestName(name) },
-    }) : false;
+    const exists = userExists
+      ? await prisma.guest.count({
+          where: { name: formatGuestName(name) },
+        })
+      : false;
     const formData: RSVPForm = {
       name: formatGuestName(name),
       email,
@@ -77,7 +79,6 @@ export default function RSVP() {
   const [showGuestFields, setShowGuestFields] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [guestName, setGuestName] = React.useState("");
-  // const [showForm, setShowForm] = React.useState(false);
   const [userExists, setUserExists] = React.useState(0);
   const [attending, setAttending] = React.useState("");
   const [mealChoice, setMealChoice] = React.useState("");
@@ -91,7 +92,7 @@ export default function RSVP() {
 
   const onRemove = () => {
     setShowGuestFields(false);
-    setGuestName('');
+    setGuestName("");
   };
 
   const onShowFormClick = () => {
@@ -144,7 +145,7 @@ export default function RSVP() {
           <div className="hidden md:flex items-baseline max-w-lg">
             <img src="https://github.com/hellodough/anna-george-wedding/blob/main/assets/images/bw_square.jpg?raw=true" />
           </div>
-          <div className="flex items-center s:col-span-3 text-center max-w-lg">
+          <div className="flex items-center text-center max-w-lg px-2">
             <div>
               <h1 className="text-sky-700 font-display text-4xl lg:text-5xl mb-7">
                 RSVP
@@ -152,16 +153,25 @@ export default function RSVP() {
               {showNextSteps ? (
                 <>
                   <p>Submitted! Thanks for sharing!</p>
-                  <button
-                    className="btn-secondary uppercase mt-8 mr-8"
-                    type="button"
-                    onClick={onShowFormClick}
-                  >
-                    Change response
-                  </button>
-                  <a href="/travel" className="btn-secondary uppercase mt-8">
-                    Book a hotel
-                  </a>
+                  <div className="flex gap-4 flex-wrap">
+                    <div className="sm:w-full flex-grow">
+                      <button
+                        className="btn-secondary uppercase mt-8 mr-8"
+                        type="button"
+                        onClick={onShowFormClick}
+                      >
+                        Change response
+                      </button>
+                    </div>
+                    <div className="sm:w-full flex-grow">
+                      <a
+                        href="/travel"
+                        className="btn-secondary uppercase mt-8"
+                      >
+                        Book a hotel
+                      </a>
+                    </div>
+                  </div>
                 </>
               ) : (
                 <>

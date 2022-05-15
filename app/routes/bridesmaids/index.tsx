@@ -29,19 +29,19 @@ export default function Bridesmaids() {
                 href="https://discord.gg/UGqPPgnPNH"
                 className="btn-primary mb-4 block text-center"
               >
-                Start talking
+                📱 &nbsp; Start talking
               </a>
               <a
                 href="https://doannado.notion.site/Bridesmaid-clothing-5601787618d2487ea3c8da2f0851c6f8"
                 className="btn-secondary my-4 block text-center"
               >
-                Bridesmaids Attire
+                👠  &nbsp;  Bridesmaids Attire
               </a>
               <a
                 href="https://doannado.notion.site/Bachelorette-Party-fd45c58fccae4619b986d2ed7a7128e1"
                 className="btn-secondary my-4 block text-center"
               >
-                Bachlorette party
+                🥳 &nbsp;   Bachlorette party
               </a>
             </div>
           </div>

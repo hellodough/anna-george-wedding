@@ -32,6 +32,12 @@ export default function Bridesmaids() {
                 📱 &nbsp; Start talking
               </a>
               <a
+                href="https://doannado.notion.site/Bridal-Partiers-ae9b90003b7e4fd783d6aa4f76ab58ef"
+                className="btn-secondary my-4 block text-center"
+              >
+                🤼  &nbsp;  Bridal Partiers
+              </a>
+              <a
                 href="https://doannado.notion.site/Bridesmaid-clothing-5601787618d2487ea3c8da2f0851c6f8"
                 className="btn-secondary my-4 block text-center"
               >
@@ -43,19 +49,13 @@ export default function Bridesmaids() {
               >
                 🥳 &nbsp;   Bachlorette party
               </a>
+              <a
+                href="https://doannado.notion.site/Bridesmaids-schedule-0a241d63865349878a51b8cbdf4c0adc"
+                className="btn-secondary my-4 block text-center"
+              >
+                🕦 &nbsp;   Wedding Schedule (in progress)
+              </a>
             </div>
-          </div>
-          <div hidden>
-            <p>
-              I’m still working on this page, so it is empty for now, but I’m
-              planning on including:
-            </p>
-            <ul>
-              <li>bridesmaid dress colors</li>
-              <li>wedding schedule</li>
-              <li>other bridesmaids contact information</li>
-              <li>dress inspo</li>
-            </ul>
           </div>
           {/* <iframe
         src="https://discord.com/widget?id=932775591525097494&theme=dark"

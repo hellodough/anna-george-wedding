@@ -47,7 +47,7 @@ export default function Bridesmaids() {
                 href="https://doannado.notion.site/Bachelorette-Party-fd45c58fccae4619b986d2ed7a7128e1"
                 className="btn-secondary my-4 block text-center"
               >
-                🥳 &nbsp;   Bachlorette party
+                🥳 &nbsp;   Bachelorette party
               </a>
               <a
                 href="https://doannado.notion.site/Bridesmaids-schedule-0a241d63865349878a51b8cbdf4c0adc"

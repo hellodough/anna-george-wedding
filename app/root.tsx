@@ -17,18 +17,38 @@ import { HeaderNav } from "./components/HeaderNav/HeaderNav";
 export async function loader({ request }) {
   const cookieHeader = request.headers.get("Cookie");
   const cookie = (await userValidated.parse(cookieHeader)) || {};
-  const path = new URL(request.url).pathname;
-  console.log("cookie " + cookie.annageorge);
-  console.log(path);
+  let url = new URL(request.url);
+  let hostname = url.hostname;
+  let proto = request.headers.get("X-Forwarded-Proto") ?? url.protocol;
+  let shouldRedirect = true;
+  let targetPath = '/login';
   if (cookie?.annageorge) {
-    if (path === "/login") {
-      return redirect("/");
+    if (url.pathname === "/login") {
+      shouldRedirect = true;
+      targetPath = '/'
+    } else {
+      shouldRedirect = false;
     }
-    return json({ ok: true });
-  } else if (path === "/login") {
-    return json({ ok: true });
+  } else if (url.pathname === "/login") {
+    shouldRedirect = false;
+    
   }
-  return redirect("/login");
+
+  url.host =
+    request.headers.get("X-Forwarded-Host") ??
+    request.headers.get("host") ??
+    url.host;
+  url.protocol = "https:";
+
+  if (proto === "http" && hostname !== "localhost") {
+    const redirectUrl = shouldRedirect ? targetPath : url.toString();
+    return redirect(redirectUrl, {
+      headers: {
+        "X-Forwarded-Proto": "https",
+      },
+    });
+  }
+  return shouldRedirect ? redirect(targetPath) : {}
 }
 
 function classNames(...classes) {

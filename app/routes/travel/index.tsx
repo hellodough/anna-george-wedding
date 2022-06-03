@@ -14,7 +14,7 @@ export default function Travel() {
           </h1>
           <div className="mx-4">
             <p>
-              We reserved rooms for our out of town guests at the Selina Hotel,
+              We reserved rooms for our out of town guests at the Selina Hotel until <strong>June 15</strong>,
             </p>
             <p>
               {" "}

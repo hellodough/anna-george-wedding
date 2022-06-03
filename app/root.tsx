@@ -86,7 +86,7 @@ export let links: LinksFunction = () => {
 // https://remix.run/api/conventions#route-filenames
 export default function App() {
   return (
-    <Document>
+    <Document title="anna & george">
       <Layout>
         <Outlet />
       </Layout>

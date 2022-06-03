@@ -1,5 +1,6 @@
 import { HeaderNav } from "~/components/HeaderNav/HeaderNav";
 import Map, { Popup } from "react-map-gl";
+import { Link } from "remix";
 
 const accessToken =
   "pk.eyJ1IjoiYW5uYWRvIiwiYSI6ImNqamVqdTd4NzFkanUzcHBleXNjbGhqaXYifQ.XVpePfFWqkLkeTonHTwx7A";
@@ -116,6 +117,7 @@ const ScheduleDetails = () => (
   <div className="py-4">
     <h2 className="uppercase font-bold text-2xl mb-4">The Time</h2>
     <div className="text-l">
+      <p>Saturday July 16, 2022</p>
       <p>
         Ceremony begins at <strong>6 pm</strong>
       </p>
@@ -130,9 +132,10 @@ const ScheduleDetails = () => (
 const Logistics = () => (
   <div className="mb-4">
     <h2 className="uppercase font-bold text-2xl mb-4">The Logistics</h2>
+    <p>👗 Cocktail attire suggested</p>
     <p>
-      🅿️ There is no designated parking, but there is plenty of street parking
-      in front of the venue on Grand Ave.
+      🅿️ Plenty of street parking available in front of the venue on Grand Ave.
     </p>
+    <p>🏨 Hotel room block available under <Link to="/travel" className="hover:bg-blue-800 hover:text-white underline decoration-slate-700 decoration-2 text-blue-700">Travel link</Link></p>
   </div>
 );

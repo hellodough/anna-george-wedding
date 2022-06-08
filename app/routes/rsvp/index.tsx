@@ -1,12 +1,17 @@
 import { HeaderNav } from "~/components/HeaderNav/HeaderNav";
 import { Form, json, useActionData } from "remix";
-import React, { FormEvent, useEffect } from "react";
+import React, { useEffect, useImperativeHandle } from "react";
 import { prisma } from "~/db.server";
-import { createUser } from "~/utils/guests.server";
+import { submitResponse } from "~/utils/guests.server";
 import { RSVPForm } from "~/utils/types.server";
 import { InputField } from "./InputField";
 import { formatGuestName } from "./helpers";
-import { MealChoice } from "./MealChoice";
+import MealChoiceField from "./components/MealChoiceField";
+import GuestField from "./components/GuestField";
+import AttendingField from "./components/AttendingField";
+import SearchUser from "./components/SearchUser";
+import NextSteps from "./components/NextSteps";
+import Error from "./components/Error";
 
 export async function action({ request }) {
   const bodyParams = await request.formData();
@@ -22,27 +27,31 @@ export async function action({ request }) {
 
   // search user and return data
   if (searchUser) {
-    const foundUser = await prisma.guest.findUnique({
-      where: { name: formatGuestName(name) },
+    const results = await prisma.guest.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: formatGuestName(name),
+            },
+          },
+          {
+            guestName: {
+              contains: formatGuestName(name),
+            },
+          },
+        ],
+      },
     });
 
-    if (foundUser) {
-      const formData = {
-        ...foundUser,
-        attending: true ? "attending" : "notAttending",
-      };
-      return json({ ...formData, exists: true, searched: true });
+    if (results.length > 0) {
+      return json({ possibleGuests: results, searched: true });
     }
 
     return json({ name, exists: false, searched: true });
   }
 
   if (name && attending !== null) {
-    const exists = userExists
-      ? await prisma.guest.count({
-          where: { name: formatGuestName(name) },
-        })
-      : false;
     const formData: RSVPForm = {
       name: formatGuestName(name),
       email,
@@ -53,17 +62,17 @@ export async function action({ request }) {
       guestMealChoice,
     };
 
-    const guestInfo = await createUser(formData, userExists);
+    const guestInfo = await submitResponse(formData, userExists);
     if (!guestInfo) {
       return json(
         {
-          error: `Something went wrong trying to create a new user.`,
+          error: `Something went wrong trying to create or update user.`,
         },
         { status: 400 }
       );
     }
 
-    return json({ success: true, ...formData, exists });
+    return json({ success: true, ...formData });
   }
 
   return json({
@@ -86,6 +95,8 @@ export default function RSVP() {
   const [diet, setDiet] = React.useState("");
   const [showNextSteps, setShowNextSteps] = React.useState(false);
   const [userSearched, setUserSearched] = React.useState(false);
+  const [possibleGuests, setPossibleGuests] = React.useState([]);
+  const [showForm, setShowForm] = React.useState(false);
   const onAddClick = () => {
     setShowGuestFields(true);
   };
@@ -97,14 +108,15 @@ export default function RSVP() {
 
   const onShowFormClick = () => {
     setShowNextSteps(false);
+    setShowForm(true);
   };
 
   const onGuestNameChange = (updatedName: string) => {
     setGuestName(updatedName);
   };
 
-  const onAttendingChange = (e: FormEvent<HTMLInputElement>) => {
-    setAttending(e.currentTarget.value);
+  const onAttendingChange = (attendingChecked: string) => {
+    setAttending(attendingChecked);
   };
 
   const onMealChoiceChange = (updatedMealChoice: string) => {
@@ -129,13 +141,47 @@ export default function RSVP() {
     setName(data?.name || "");
     setMealChoice(data?.mealChoice || "");
     setGuestMealChoice(data?.guestMealChoice || "");
-    setShowGuestFields(data?.guestName || "");
+    setShowGuestFields(data?.guestName ? true : false);
     setGuestName(data?.guestName || "");
     setEmail(data?.email || "");
-    setUserExists(data?.exists || false);
     setDiet(data?.dietRestrictions || "");
     setUserSearched(data?.searched || data?.success);
+    setPossibleGuests(data?.possibleGuests || []);
   }, [data]);
+
+  useEffect(() => {
+    setShowForm(userSearched && possibleGuests.length === 0);
+  }, [userSearched, possibleGuests]);
+
+  const setNewForm = () => {
+    setUserExists(0);
+    setPossibleGuests([]);
+  };
+
+  const PossibleGuest = (guest: RSVPForm) => {
+    const onClick = () => {
+      setAttending(guest.attending ? "attending" : "notAttending");
+      setName(guest.name);
+      setMealChoice(guest.mealChoice || "");
+      setGuestMealChoice(guest.guestMealChoice || "");
+      setShowGuestFields(guest.guestName ? true : false);
+      setGuestName(guest.guestName || "");
+      setEmail(guest.email || "");
+      setUserExists(1);
+      setDiet(guest.dietRestrictions || "");
+      setPossibleGuests([]);
+      setUserSearched(true);
+    };
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className="block text-blue-600 hover:underline px-4"
+      >
+        {guest.name}
+      </button>
+    );
+  };
 
   return (
     <div className="h-screen">
@@ -150,29 +196,9 @@ export default function RSVP() {
               <h1 className="text-sky-700 font-display text-4xl lg:text-5xl mb-7">
                 RSVP
               </h1>
+
               {showNextSteps ? (
-                <>
-                  <p>Submitted! Thanks for sharing!</p>
-                  <div className="flex gap-4 flex-wrap">
-                    <div className="sm:w-full flex-grow">
-                      <button
-                        className="btn-secondary uppercase mt-8 mr-8"
-                        type="button"
-                        onClick={onShowFormClick}
-                      >
-                        Change response
-                      </button>
-                    </div>
-                    <div className="sm:w-full flex-grow">
-                      <a
-                        href="/travel"
-                        className="btn-secondary uppercase mt-8"
-                      >
-                        Book a hotel
-                      </a>
-                    </div>
-                  </div>
-                </>
+                <NextSteps onShowFormClick={onShowFormClick} />
               ) : (
                 <>
                   <p className="lg:text-base xs:text-sm mb-6 font-body max-w-m">
@@ -183,72 +209,38 @@ export default function RSVP() {
                     unless you want to change your response.
                   </p>
                   <Error showError={data?.nameError || data?.attendingError} />
-                  {userExists && (
-                    <p className="mb-6 font-body justify-center">
-                      Note: you have already replied, but feel free to change
-                      any details
-                    </p>
-                  )}
                   <Form replace method="post">
-                    <div className="flex gap-4 justify-center">
-                      <InputField
-                        text="name"
-                        value={name}
-                        error={data?.nameError}
-                        onFieldChange={onNameChange}
-                      />
-                      {name && !userSearched && (
-                        <>
-                          <input type="hidden" name="searchUser" value="true" />
-                          <button
-                            type="submit"
-                            className="btn-secondary uppercase mt-8"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </button>
-                        </>
-                      )}
-                    </div>
-                    {userSearched && (
-                      // attendance
-                      <div className="flex mt-8 gap-4 justify-center">
-                        <div>
-                          <label htmlFor="attendingYes" className="mr-2">
-                            yes, I will be there
-                          </label>
-                          <input
-                            id="attendingYes"
-                            name="attending"
-                            type="radio"
-                            value="attending"
-                            checked={attending === "attending"}
-                            onChange={onAttendingChange}
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor="attendingNo" className="mr-2">
-                            sorry, I can't come
-                          </label>
-                          <input
-                            id="attendingNo"
-                            name="attending"
-                            type="radio"
-                            value="notAttending"
-                            checked={attending === "notAttending"}
-                            onChange={onAttendingChange}
-                          />
-                        </div>
+                    {possibleGuests?.length === 0 && (
+                      <>
+                        <SearchUser
+                          name={name}
+                          onNameChange={onNameChange}
+                          userSearched={userSearched}
+                          error={data?.nameError}
+                        />
+                        {showForm && (
+                          <div className="flex mt-8 gap-4 justify-center">
+                            <AttendingField
+                              attending={attending}
+                              onAttendingChange={onAttendingChange}
+                            />
+                          </div>
+                        )}
+                      </>
+                    )}
+                    {possibleGuests.length > 0 && (
+                      <div>
+                        <div>Click the correct name</div>
+                        {possibleGuests.map((guest) => (
+                          <PossibleGuest {...guest} />
+                        ))}
+                        <button
+                          type="button"
+                          onClick={setNewForm}
+                          className="block text-blue-600 hover:underline px-4"
+                        >
+                          New RSVP response
+                        </button>
                       </div>
                     )}
                     {data?.attendingError && attending == undefined && (
@@ -258,31 +250,13 @@ export default function RSVP() {
                     )}
                     {attending === "attending" && (
                       <div>
-                        {/* additional guest selection */}
-                        {showGuestFields ? (
-                          <div className="flex pt-3 gap-5 justify-center">
-                            <InputField
-                              text="guest name"
-                              value={guestName}
-                              onFieldChange={onGuestNameChange}
-                            />
-                            <button
-                              type="button"
-                              onClick={onRemove}
-                              className="btn-secondary uppercase mt-8"
-                            >
-                              remove
-                            </button>
-                          </div>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={onAddClick}
-                            className="btn-secondary uppercase mt-8"
-                          >
-                            add guest
-                          </button>
-                        )}
+                        <GuestField
+                          showGuestField={showGuestFields}
+                          onGuestNameChange={onGuestNameChange}
+                          onRemove={onRemove}
+                          onAddClick={onAddClick}
+                          guestName={guestName}
+                        />
                         <div className="flex pt-3 gap-5 justify-center">
                           <InputField
                             text="email"
@@ -295,42 +269,20 @@ export default function RSVP() {
                             onFieldChange={onDietChange}
                           />
                         </div>
-                        {/* meal options */}
                         <div className="pt-4">
-                          <fieldset>
-                            <label>
-                              <strong>Meal Options</strong>
-                            </label>
-                            <p className="pb-3 text-sm">
-                              We will update this with specific dishes when we
-                              finalize the menu
-                            </p>
-                            <div className="flex text-left justify-evenly gap-4">
-                              <div>
-                                {guestName && <p>{name}'s meal choice</p>}
-                                <MealChoice
-                                  fieldPrefix="meal"
-                                  mealChoice={mealChoice}
-                                  onMealChoiceChange={onMealChoiceChange}
-                                />
-                              </div>
-                              {guestName && (
-                                <div>
-                                  <p>{guestName}'s meal choice</p>
-                                  <MealChoice
-                                    fieldPrefix="guestMeal"
-                                    mealChoice={guestMealChoice}
-                                    onMealChoiceChange={setGuestMealChoice}
-                                  />
-                                </div>
-                              )}
-                            </div>
-                          </fieldset>
+                          <MealChoiceField
+                            name={name}
+                            guestName={guestName}
+                            mealChoice={mealChoice}
+                            guestMealChoice={guestMealChoice}
+                            onMealChoiceChange={onMealChoiceChange}
+                            onGuestMealChoiceChange={setGuestMealChoice}
+                          />
                         </div>
                       </div>
                     )}
                     <input type="hidden" name="userExists" value={userExists} />
-                    {userSearched && (
+                    {showForm && (
                       <button
                         className="btn-primary uppercase mt-14"
                         type="submit"
@@ -348,28 +300,3 @@ export default function RSVP() {
     </div>
   );
 }
-
-const Error = ({ showError }: { showError?: boolean }) => {
-  if (showError) {
-    return (
-      <div className="px-2 py-3 border-solid rounded-md bg-red-700 text-white">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fillRule="evenodd"
-            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-            clipRule="evenodd"
-          />
-        </svg>
-        There were some errors, please make sure you submit a name and
-        attendance response
-      </div>
-    );
-  }
-
-  return null;
-};

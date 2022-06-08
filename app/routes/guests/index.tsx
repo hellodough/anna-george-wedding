@@ -95,7 +95,7 @@ export default function Guests() {
         <p>🥩 Meat meals: {meatCount}</p>
         <p>🥗 Veg meals: {vegCount}</p>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="table-auto w-full text-sm text-left text-white ">
+          <table className="table-auto w-full text-sm text-left text-black dark:text-white dark:bg-gray-900">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6 py-3">
